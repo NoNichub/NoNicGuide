@@ -1,0 +1,2376 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NoNic Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'League Spartan', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+    
+    html, body, #app-wrapper {
+      height: 100%;
+      width: 100%;
+    }
+
+    #app-wrapper {
+      background: linear-gradient(135deg, #24284A 0%, #3a3f6b 100%);
+      overflow-y: auto;
+    }
+
+    .page {
+      display: none;
+      min-height: 100%;
+      width: 100%;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* Home Page Styles */
+    .home-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated background elements */
+    .home-page::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      top: -100px;
+      right: -100px;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .home-page::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      bottom: -50px;
+      left: -50px;
+      animation: float 15s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) translateX(0px); }
+      50% { transform: translateY(-30px) translateX(30px); }
+    }
+
+    .home-header {
+      color: white;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .home-logo {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .home-header h1 {
+      font-size: 3.5rem;
+      margin: 0 0 1rem 0;
+      font-weight: 700;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      color: #FFFDD0;
+    }
+
+    .home-subtitle {
+      font-size: 1.125rem;
+      opacity: 0.95;
+      margin: 0.5rem 0;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .home-tagline {
+      font-size: 1.5rem;
+      opacity: 0.98;
+      margin: 1rem 0 0 0;
+      font-weight: 600;
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .menu-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #8E2928, #F6B737);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .menu-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .menu-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .menu-card-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    }
+
+    .menu-card h2 {
+      color: #24284A;
+      font-size: 1.5rem;
+      margin: 0 0 0.5rem 0;
+      font-weight: 700;
+    }
+
+    .menu-card p {
+      color: #F6B737;
+      font-size: 0.95rem;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* Header Navigation */
+    .page-header {
+      background: white;
+      padding: 1.25rem 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .back-button {
+      background: #8E2928;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(142, 41, 40, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .back-button:hover {
+      background: #6d1f1e;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(142, 41, 40, 0.4);
+    }
+
+    .back-arrow {
+      font-size: 1.25em;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .page-title {
+      color: #24284A;
+      font-size: 1.75rem;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .page-content {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Dashboard Section Styles */
+    .dashboard-section {
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .dashboard-section h2 {
+      color: #24284A;
+      font-size: 1.5rem;
+      margin: 0 0 1.25rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .metric-card {
+      background: white;
+      padding: 1.25rem;
+      border-radius: 12px;
+      border-left: 4px solid #8E2928;
+    }
+
+    .metric-label {
+      color: #F6B737;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-value {
+      color: #24284A;
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    .chart-container {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+      min-height: 200px;
+      position: relative;
+      border: 2px solid #F6B737;
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      height: 180px;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .chart-bar {
+      flex: 1;
+      background: linear-gradient(180deg, #8E2928 0%, #F6B737 100%);
+      border-radius: 8px 8px 0 0;
+      min-height: 20px;
+      position: relative;
+    }
+
+    .chart-label {
+      position: absolute;
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      color: #F6B737;
+      white-space: nowrap;
+    }
+
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .badge {
+      text-align: center;
+      padding: 1rem;
+      background: white;
+      border-radius: 12px;
+      transition: transform 0.2s ease;
+      border: 2px solid #F6B737;
+    }
+
+    .badge:hover {
+      transform: scale(1.05);
+    }
+
+    .badge-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .badge-name {
+      color: #24284A;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    /* Pattern Watch Styles */
+    .alert-box {
+      background: #fef2f2;
+      border: 2px solid #f87171;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .alert-box.low-risk {
+      background: #f0fdf4;
+      border-color: #4ade80;
+    }
+
+    .alert-title {
+      color: #24284A;
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .factor-list {
+      list-style: none;
+      padding: 0;
+      margin: 0.75rem 0 0 0;
+    }
+
+    .factor-list li {
+      padding: 0.5rem 0;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Support Circle Styles */
+    .forum-post {
+      background: white;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .post-author {
+      color: #8E2928;
+      font-weight: 600;
+    }
+
+    .post-time {
+      color: #94a3b8;
+      font-size: 0.875rem;
+    }
+
+    .post-content {
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+
+    .post-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .post-action {
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 0.875rem;
+      padding: 0.25rem 0.5rem;
+      transition: color 0.2s ease;
+    }
+
+    .post-action:hover {
+      color: #8E2928;
+    }
+
+    .new-post-form {
+      background: #f8fafc;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      color: #24284A;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: #8E2928;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .submit-button {
+      background: #8E2928;
+      color: white;
+      border: none;
+      padding: 0.875rem 2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(142, 41, 40, 0.3);
+    }
+
+    .submit-button:hover {
+      background: #6d1f1e;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(142, 41, 40, 0.4);
+    }
+
+    .submit-button:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Art Corner Styles */
+    .art-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .art-item {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+    }
+
+    .art-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .art-preview {
+      background: linear-gradient(135deg, #8E2928 0%, #F6B737 100%);
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .art-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .art-preview-icon {
+      position: absolute;
+      font-size: 4rem;
+      z-index: 1;
+    }
+
+    .art-details {
+      padding: 1.25rem;
+    }
+
+    .art-title {
+      color: #1e293b;
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .art-description {
+      color: #64748b;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      margin: 0 0 0.75rem 0;
+    }
+
+    .art-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #94a3b8;
+      font-size: 0.875rem;
+    }
+
+    /* Wellness Library Styles */
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .library-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .library-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .library-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .library-card h3 {
+      color: #1e293b;
+      font-size: 1.25rem;
+      margin: 0 0 0.75rem 0;
+    }
+
+    .library-card > p {
+      color: #64748b;
+      line-height: 1.6;
+      margin: 0 0 1rem 0;
+    }
+
+    .learn-more {
+      color: #8E2928;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: gap 0.2s ease;
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 0;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .learn-more:hover {
+      gap: 0.75rem;
+    }
+
+    .library-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .library-content.expanded {
+      max-height: 2000px;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 2px solid #f1f5f9;
+    }
+
+    .content-section {
+      margin-bottom: 1rem;
+    }
+
+    .content-section h4 {
+      color: #1e293b;
+      font-size: 1rem;
+      margin: 0 0 0.5rem 0;
+      font-weight: 600;
+    }
+
+    .content-section p, .content-section ul {
+      color: #64748b;
+      line-height: 1.6;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .content-section ul {
+      padding-left: 1.5rem;
+    }
+
+    .content-section li {
+      margin-bottom: 0.25rem;
+    }
+
+    /* Journal Styles */
+    .journal-entry {
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .entry-date {
+      color: #94a3b8;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .entry-content {
+      color: #475569;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .entry-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .entry-button {
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 0.875rem;
+      padding: 0.25rem 0.5rem;
+      transition: color 0.2s ease;
+    }
+
+    .entry-button:hover {
+      color: #8E2928;
+    }
+
+    .entry-button.delete:hover {
+      color: #f87171;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #94a3b8;
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div id="app-wrapper"><!-- Home Page -->
+   <div id="home" class="page active home-page">
+    <header class="home-header">
+     <div class="home-logo" style="color: #FFFDD0; font-weight: 700; font-size: 3.5rem; letter-spacing: -0.02em; text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);" id="app-title">
+      NoNic Guide
+     </div>
+     <p class="home-subtitle" id="welcome-message">Your companion for a healthier, happier you</p>
+     <p class="home-tagline" id="tagline">Your path to a healthy life starts here. Simple tools. Real support.</p>
+    </header>
+    <div class="menu-grid">
+     <div class="menu-card" onclick="navigateTo('health')">
+      <div class="menu-card-icon">
+       ❤️
+      </div>
+      <h2 id="health-menu-title">Health Monitoring</h2>
+      <p>Track your improvements, mood, and milestones</p>
+     </div>
+     <div class="menu-card" onclick="navigateTo('pattern')">
+      <div class="menu-card-icon">
+       📊
+      </div>
+      <h2 id="pattern-menu-title">Pattern Watch</h2>
+      <p>Stay aware of behavioral patterns and risks</p>
+     </div>
+     <div class="menu-card" onclick="navigateTo('support')">
+      <div class="menu-card-icon">
+       🤝
+      </div>
+      <h2 id="support-menu-title">Support Circle</h2>
+      <p>Connect with others on similar journeys</p>
+     </div>
+     <div class="menu-card" onclick="navigateTo('art')">
+      <div class="menu-card-icon">
+       🖼️
+      </div>
+      <h2 id="art-menu-title">Art Corner</h2>
+      <p>Share your creative expressions</p>
+     </div>
+     <div class="menu-card" onclick="navigateTo('library')">
+      <div class="menu-card-icon">
+       📖
+      </div>
+      <h2 id="library-menu-title">Wellness Library</h2>
+      <p>Learn about health and recovery</p>
+     </div>
+     <div class="menu-card" onclick="navigateTo('journal')">
+      <div class="menu-card-icon">
+       📝
+      </div>
+      <h2 id="journal-menu-title">Journal</h2>
+      <p>Record your thoughts and feelings privately</p>
+     </div>
+    </div>
+   </div><!-- Health Monitoring Dashboard -->
+   <div id="health" class="page">
+    <header class="page-header"><button class="back-button" onclick="navigateTo('home')"> <span class="back-arrow">←</span> Back to Home </button>
+     <h1 class="page-title" id="health-page-title">Health Monitoring</h1>
+     <div></div>
+    </header>
+    <main class="page-content">
+     <div class="new-post-form">
+      <h2 style="color: #1e293b; margin: 0 0 1rem 0;">📋 Daily Check-In</h2>
+      <form id="health-form" onsubmit="handleHealthCheckIn(event)">
+       <div class="form-group"><label for="breathing">Breathing Comfort (1-10)</label> <input type="number" id="breathing" class="form-input" min="1" max="10" placeholder="Rate 1-10" required>
+       </div>
+       <div class="form-group"><label for="energy">Energy Levels (1-10)</label> <input type="number" id="energy" class="form-input" min="1" max="10" placeholder="Rate 1-10" required>
+       </div>
+       <div class="form-group"><label for="sleep">Sleep Quality (1-10)</label> <input type="number" id="sleep" class="form-input" min="1" max="10" placeholder="Rate 1-10" required>
+       </div>
+       <div class="form-group"><label for="heart-rate">Heart Rate (bpm)</label>
+        <div style="display: flex; gap: 0.5rem; align-items: center;"><input type="number" id="heart-rate" class="form-input" min="40" max="200" placeholder="Enter heart rate" required style="flex: 1;"> <button type="button" class="submit-button" onclick="syncHeartRate()" id="sync-watch-btn" style="padding: 0.75rem 1rem; white-space: nowrap;"> ⌚ Sync Watch </button>
+        </div>
+        <div id="watch-status" style="margin-top: 0.5rem; font-size: 0.875rem; color: #64748b;"></div>
+       </div>
+       <div class="form-group"><label for="craving">Craving Intensity (1-10)</label> <input type="number" id="craving" class="form-input" min="1" max="10" placeholder="Rate 1-10" required>
+       </div><button type="submit" class="submit-button" id="health-submit">Submit Check-In</button>
+      </form>
+     </div>
+     <section class="dashboard-section">
+      <h2>❤️ Health Improvements (7-Day Average)</h2>
+      <div class="metric-grid" id="health-metrics">
+       <div class="metric-card">
+        <div class="metric-label">
+         Breathing Comfort
+        </div>
+        <div class="metric-value" id="metric-breathing">
+         --
+        </div>
+       </div>
+       <div class="metric-card">
+        <div class="metric-label">
+         Energy Levels
+        </div>
+        <div class="metric-value" id="metric-energy">
+         --
+        </div>
+       </div>
+       <div class="metric-card">
+        <div class="metric-label">
+         Sleep Quality
+        </div>
+        <div class="metric-value" id="metric-sleep">
+         --
+        </div>
+       </div>
+       <div class="metric-card">
+        <div class="metric-label">
+         Heart Rate (avg)
+        </div>
+        <div class="metric-value" id="metric-heart">
+         --
+        </div>
+       </div>
+      </div>
+     </section>
+     <section class="dashboard-section">
+      <h2>📈 Craving Trends</h2>
+      <div class="chart-container">
+       <div style="color: #64748b; margin-bottom: 0.5rem;">
+        Craving Intensity (Last 7 Days)
+       </div>
+       <div class="chart-bars" id="craving-chart">
+        <div style="text-align: center; color: #94a3b8; width: 100%; padding: 2rem;">
+         No data yet. Submit your first check-in!
+        </div>
+       </div>
+      </div>
+     </section>
+     <section class="dashboard-section">
+      <h2>🏆 Milestones &amp; Rewards</h2>
+      <div class="badge-grid" id="badges-container">
+       <div class="badge" style="opacity: 0.3;" id="badge-first">
+        <div class="badge-icon">
+         ✨
+        </div>
+        <div class="badge-name">
+         First Check-in
+        </div>
+       </div>
+       <div class="badge" style="opacity: 0.3;" id="badge-3day">
+        <div class="badge-icon">
+         🎯
+        </div>
+        <div class="badge-name">
+         3 Day Streak
+        </div>
+       </div>
+       <div class="badge" style="opacity: 0.3;" id="badge-7day">
+        <div class="badge-icon">
+         ⭐
+        </div>
+        <div class="badge-name">
+         7 Days Strong
+        </div>
+       </div>
+       <div class="badge" style="opacity: 0.3;" id="badge-14day">
+        <div class="badge-icon">
+         💪
+        </div>
+        <div class="badge-name">
+         Two Weeks
+        </div>
+       </div>
+       <div class="badge" style="opacity: 0.3;" id="badge-30day">
+        <div class="badge-icon">
+         🏆
+        </div>
+        <div class="badge-name">
+         One Month
+        </div>
+       </div>
+       <div class="badge" style="opacity: 0.3;" id="badge-master">
+        <div class="badge-icon">
+         🌈
+        </div>
+        <div class="badge-name">
+         Craving Master
+        </div>
+       </div>
+      </div>
+     </section>
+    </main>
+   </div><!-- Pattern Watch Dashboard -->
+   <div id="pattern" class="page">
+    <header class="page-header"><button class="back-button" onclick="navigateTo('home')"> <span class="back-arrow">←</span> Back to Home </button>
+     <h1 class="page-title" id="pattern-page-title">Pattern Watch</h1>
+     <div></div>
+    </header>
+    <main class="page-content">
+     <section class="dashboard-section">
+      <h2>⚠️ Risk Assessment</h2>
+      <div id="risk-assessment">
+       <div class="empty-state">
+        <div class="empty-state-icon">
+         📊
+        </div>
+        <p>No health data yet. Complete daily check-ins to see your risk assessment.</p>
+       </div>
+      </div>
+     </section>
+     <section class="dashboard-section">
+      <h2>📊 Behavioral Patterns Detected</h2>
+      <div id="behavioral-patterns">
+       <div class="empty-state">
+        <div class="empty-state-icon">
+         🔍
+        </div>
+        <p>Submit health check-ins to analyze your behavioral patterns.</p>
+       </div>
+      </div>
+     </section>
+     <section class="dashboard-section">
+      <h2>📈 Craving Triggers Analysis</h2>
+      <div id="trigger-analysis">
+       <div class="empty-state">
+        <div class="empty-state-icon">
+         💡
+        </div>
+        <p>Pattern analysis will appear after you log multiple check-ins.</p>
+       </div>
+      </div>
+     </section>
+     <section class="dashboard-section">
+      <h2>✨ Personalized Recommendations</h2>
+      <div id="recommendations-section">
+       <div class="empty-state">
+        <div class="empty-state-icon">
+         ✨
+        </div>
+        <p>Recommendations will be generated based on your health data.</p>
+       </div>
+      </div>
+     </section>
+    </main>
+   </div><!-- Virtual Support Circle -->
+   <div id="support" class="page">
+    <header class="page-header"><button class="back-button" onclick="navigateTo('home')"> <span class="back-arrow">←</span> Back to Home </button>
+     <h1 class="page-title" id="support-page-title">Support Circle</h1>
+     <div></div>
+    </header>
+    <main class="page-content">
+     <div class="new-post-form">
+      <h2 style="color: #1e293b; margin: 0 0 1rem 0;">Share Your Experience</h2>
+      <form id="support-form" onsubmit="handleSupportPost(event)">
+       <div class="form-group"><label for="support-username">Display Name (Optional)</label> <input type="text" id="support-username" class="form-input" placeholder="Leave blank for 'Anonymous'">
+       </div>
+       <div class="form-group"><label for="support-category">Category</label> <select id="support-category" class="form-input" required> <option value="">Select a category...</option> <option value="victory">💪 Victory Story</option> <option value="struggle">💭 Need Support</option> <option value="tip">💡 Helpful Tip</option> <option value="milestone">🎯 Milestone</option> <option value="question">❓ Question</option> </select>
+       </div>
+       <div class="form-group"><label for="support-title">Title</label> <input type="text" id="support-title" class="form-input" placeholder="Give your post a title..." required>
+       </div>
+       <div class="form-group"><label for="support-content">Your Message</label> <textarea id="support-content" class="form-textarea" placeholder="Share your thoughts, tips, or experiences in detail..." required></textarea>
+       </div><button type="submit" class="submit-button" id="support-submit">Post to Circle</button>
+      </form>
+     </div>
+     <div id="support-posts"></div>
+    </main>
+   </div><!-- Art Corner -->
+   <div id="art" class="page">
+    <header class="page-header"><button class="back-button" onclick="navigateTo('home')"> <span class="back-arrow">←</span> Back to Home </button>
+     <h1 class="page-title" id="art-page-title">Art Corner</h1>
+     <div></div>
+    </header>
+    <main class="page-content">
+     <div class="new-post-form">
+      <h2 style="color: #1e293b; margin: 0 0 1rem 0;">Share Your Creativity</h2>
+      <form id="art-form" onsubmit="handleArtPost(event)">
+       <div class="form-group"><label for="art-username">Artist Name (Optional)</label> <input type="text" id="art-username" class="form-input" placeholder="Leave blank for 'Anonymous Artist'">
+       </div>
+       <div class="form-group"><label for="art-medium">Art Medium</label> <select id="art-medium" class="form-input" required> <option value="">Select medium...</option> <option value="painting">🎨 Painting</option> <option value="drawing">✏️ Drawing</option> <option value="digital">💻 Digital Art</option> <option value="poetry">📝 Poetry/Writing</option> <option value="music">🎵 Music/Song</option> <option value="photography">📷 Photography</option> <option value="craft">✂️ Craft/Handmade</option> <option value="other">✨ Other</option> </select>
+       </div>
+       <div class="form-group"><label for="art-title">Title</label> <input type="text" id="art-title" class="form-input" placeholder="Give your work a title" required>
+       </div>
+       <div class="form-group"><label for="art-description">Description</label> <textarea id="art-description" class="form-textarea" placeholder="Tell us about your creation, what inspired you, and what it means to you..." required></textarea>
+       </div>
+       <div class="form-group"><label for="art-emotion">Emotion/Theme</label> <input type="text" id="art-emotion" class="form-input" placeholder="e.g., Hope, Freedom, Strength, Peace..." required>
+       </div>
+       <div class="form-group"><label for="art-image">Upload Image (Optional)</label> <input type="file" id="art-image" class="form-input" accept="image/*" onchange="handleImagePreview(event)">
+        <div id="image-preview" style="margin-top: 1rem; display: none;"><img id="preview-img" style="max-width: 100%; max-height: 300px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"> <button type="button" onclick="clearImagePreview()" style="margin-top: 0.5rem; background: #f87171; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.875rem;">Remove Image</button>
+        </div>
+       </div><button type="submit" class="submit-button" id="art-submit">Share Artwork</button>
+      </form>
+     </div>
+     <div class="art-gallery" id="art-gallery"></div>
+    </main>
+   </div><!-- Wellness Library -->
+   <div id="library" class="page">
+    <header class="page-header"><button class="back-button" onclick="navigateTo('home')"> <span class="back-arrow">←</span> Back to Home </button>
+     <h1 class="page-title" id="library-page-title">Wellness Library</h1>
+     <div></div>
+    </header>
+    <main class="page-content">
+     <div class="library-grid">
+      <div class="library-card">
+       <div class="library-icon">
+        ❤️
+       </div>
+       <h3>Cardiovascular Health</h3>
+       <p>Learn how positive lifestyle changes improve heart health, reduce blood pressure, and lower cardiovascular risks over time.</p><button class="learn-more" onclick="toggleLibraryContent('cardio')"> <span id="cardio-text">Learn More</span> <span id="cardio-arrow">→</span> </button>
+       <div id="cardio-content" class="library-content">
+        <div class="content-section">
+         <h4>Immediate Benefits (20 minutes - 24 hours)</h4>
+         <ul>
+          <li>Heart rate and blood pressure begin to normalize</li>
+          <li>Improved circulation to hands and feet</li>
+          <li>Carbon monoxide levels in blood drop significantly</li>
+         </ul>
+        </div>
+        <div class="content-section">
+         <h4>Short-Term Improvements (2 weeks - 3 months)</h4>
+         <ul>
+          <li>Cardiovascular fitness improves dramatically</li>
+          <li>Heart attack risk begins to decrease</li>
+          <li>Walking and exercise become easier</li>
+          <li>Blood pressure stabilizes to healthier levels</li>
+         </ul>
+        </div>
+        <div class="content-section">
+         <h4>Long-Term Protection (1+ years)</h4>
+         <ul>
+          <li>Heart disease risk reduced by up to 50%</li>
+          <li>Stroke risk approaches that of non-users</li>
+          <li>Overall cardiovascular system functions more efficiently</li>
+         </ul>
+        </div>
+       </div>
+      </div>
+      <div class="library-card">
+       <div class="library-icon">
+        🧠
+       </div>
+       <h3>Brain &amp; Neurological Effects</h3>
+       <p>Understand how habits affect attention, mood regulation, reward pathways, and overall cognitive function.</p><button class="learn-more" onclick="toggleLibraryContent('brain')"> <span id="brain-text">Learn More</span> <span id="brain-arrow">→</span> </button>
+       <div id="brain-content" class="library-content">
+        <div class="content-section">
+         <h4>Understanding Dependency</h4>
+         <p>Nicotine alters brain chemistry by affecting dopamine pathways - the brain's reward system. With repeated exposure, the brain adapts and becomes dependent on external stimulation.</p>
+        </div>
+        <div class="content-section">
+         <h4>Recovery Timeline</h4>
+         <ul>
+          <li><strong>3 days:</strong> Physical withdrawal peaks, mood swings common</li>
+          <li><strong>2 weeks:</strong> Dopamine system begins normalizing</li>
+          <li><strong>1 month:</strong> Concentration and memory improve noticeably</li>
+          <li><strong>3 months:</strong> Brain reward pathways significantly healed</li>
+          <li><strong>1 year:</strong> Brain chemistry returns to near-normal function</li>
+         </ul>
+        </div>
+        <div class="content-section">
+         <h4>Cognitive Benefits</h4>
+         <ul>
+          <li>Improved focus and concentration</li>
+          <li>Better memory formation and recall</li>
+          <li>Enhanced mood stability</li>
+          <li>Reduced anxiety and stress over time</li>
+         </ul>
+        </div>
+       </div>
+      </div>
+      <div class="library-card">
+       <div class="library-icon">
+        🫁
+       </div>
+       <h3>Respiratory Recovery</h3>
+       <p>Discover how your lungs heal and recover, improving breathing and oxygen capacity throughout your journey.</p><button class="learn-more" onclick="toggleLibraryContent('respiratory')"> <span id="respiratory-text">Learn More</span> <span id="respiratory-arrow">→</span> </button>
+       <div id="respiratory-content" class="library-content">
+        <div class="content-section">
+         <h4>Early Recovery (1-9 months)</h4>
+         <ul>
+          <li><strong>2 weeks:</strong> Lung function increases up to 30%</li>
+          <li><strong>1 month:</strong> Cilia (tiny hairs) begin regenerating</li>
+          <li><strong>3 months:</strong> Coughing and shortness of breath decrease</li>
+          <li><strong>9 months:</strong> Lung cleaning function significantly restored</li>
+         </ul>
+        </div>
+        <div class="content-section">
+         <h4>Long-Term Healing</h4>
+         <ul>
+          <li>Reduced risk of respiratory infections</li>
+          <li>Increased oxygen capacity and endurance</li>
+          <li>Clearer breathing passages</li>
+          <li>Improved sense of smell and taste</li>
+         </ul>
+        </div>
+        <div class="content-section">
+         <h4>What You'll Notice</h4>
+         <p>Most people report breathing easier, having more energy for physical activity, and experiencing fewer respiratory issues like coughing or congestion.</p>
+        </div>
+       </div>
+      </div>
+      <div class="library-card">
+       <div class="library-icon">
+        ✨
+       </div>
+       <h3>Myth-Busting Facts</h3>
+       <p>Get evidence-based information that separates facts from common misconceptions about health and recovery.</p><button class="learn-more" onclick="toggleLibraryContent('myths')"> <span id="myths-text">Read More</span> <span id="myths-arrow">→</span> </button>
+       <div id="myths-content" class="library-content">
+        <div class="content-section">
+         <h4>Myth: "The damage is already done"</h4>
+         <p><strong>Fact:</strong> Your body begins healing within hours. Most systems show significant improvement within months, and long-term risks decrease dramatically over time.</p>
+        </div>
+        <div class="content-section">
+         <h4>Myth: "I'll gain weight if I quit"</h4>
+         <p><strong>Fact:</strong> While metabolism may temporarily slow, most weight gain is due to replacing the habit with eating. Mindful eating and exercise prevent this completely.</p>
+        </div>
+        <div class="content-section">
+         <h4>Myth: "I can't quit without help"</h4>
+         <p><strong>Fact:</strong> While support increases success rates, many people quit successfully on their own. Tools, tracking, and community support (like this app) significantly help.</p>
+        </div>
+        <div class="content-section">
+         <h4>Myth: "Cravings never go away"</h4>
+         <p><strong>Fact:</strong> Intense cravings typically peak in the first 3 days and decrease significantly within 2-4 weeks. Most people report minimal cravings after 3 months.</p>
+        </div>
+        <div class="content-section">
+         <h4>Myth: "One slip means failure"</h4>
+         <p><strong>Fact:</strong> Recovery is a journey. A single lapse doesn't erase progress. Learning from setbacks and continuing forward is what matters most.</p>
+        </div>
+       </div>
+      </div>
+      <div class="library-card">
+       <div class="library-icon">
+        💊
+       </div>
+       <h3>Understanding Dependencies</h3>
+       <p>Learn about the science of dependency, withdrawal, and the recovery process from a medical perspective.</p><button class="learn-more" onclick="toggleLibraryContent('dependency')"> <span id="dependency-text">Learn More</span> <span id="dependency-arrow">→</span> </button>
+       <div id="dependency-content" class="library-content">
+        <div class="content-section">
+         <h4>What is Physical Dependency?</h4>
+         <p>Physical dependency occurs when the body adapts to regular presence of a substance. Cells and neurotransmitter systems adjust their function, creating a new "normal" that includes the substance.</p>
+        </div>
+        <div class="content-section">
+         <h4>Withdrawal Symptoms Timeline</h4>
+         <ul>
+          <li><strong>6-12 hours:</strong> Initial cravings begin</li>
+          <li><strong>Day 1-3:</strong> Peak withdrawal (irritability, anxiety, difficulty concentrating)</li>
+          <li><strong>Day 4-7:</strong> Physical symptoms decrease</li>
+          <li><strong>Week 2-4:</strong> Psychological cravings continue but weaken</li>
+          <li><strong>Month 2+:</strong> Occasional situational cravings</li>
+         </ul>
+        </div>
+        <div class="content-section">
+         <h4>Managing Withdrawal</h4>
+         <ul>
+          <li>Stay hydrated - drink plenty of water</li>
+          <li>Exercise releases natural feel-good chemicals</li>
+          <li>Deep breathing during cravings (they pass in 3-5 minutes)</li>
+          <li>Keep hands and mind busy</li>
+          <li>Use support systems and apps like this one</li>
+         </ul>
+        </div>
+        <div class="content-section">
+         <h4>You're Not Alone</h4>
+         <p>Millions successfully navigate withdrawal every year. The discomfort is temporary, but the benefits last a lifetime.</p>
+        </div>
+       </div>
+      </div>
+      <div class="library-card">
+       <div class="library-icon">
+        🌱
+       </div>
+       <h3>Holistic Wellness</h3>
+       <p>Explore nutrition, exercise, sleep, and mindfulness practices that support overall wellbeing and recovery.</p><button class="learn-more" onclick="toggleLibraryContent('wellness')"> <span id="wellness-text">Explore Topics</span> <span id="wellness-arrow">→</span> </button>
+       <div id="wellness-content" class="library-content">
+        <div class="content-section">
+         <h4>Nutrition for Recovery</h4>
+         <ul>
+          <li><strong>Hydration:</strong> 8+ glasses of water daily helps flush toxins</li>
+          <li><strong>Protein:</strong> Supports neurotransmitter production</li>
+          <li><strong>Complex carbs:</strong> Stabilizes blood sugar and mood</li>
+          <li><strong>Omega-3s:</strong> Supports brain health (fish, nuts, seeds)</li>
+          <li><strong>Fresh produce:</strong> Vitamins and antioxidants aid healing</li>
+         </ul>
+        </div>
+        <div class="content-section">
+         <h4>Exercise Benefits</h4>
+         <p>Physical activity is one of the most effective tools for managing cravings and improving mood. It releases endorphins, reduces stress, and improves sleep quality.</p>
+         <ul>
+          <li>Start with 10-15 minutes daily walks</li>
+          <li>Try yoga or stretching for stress relief</li>
+          <li>Build up to 30+ minutes of activity most days</li>
+         </ul>
+        </div>
+        <div class="content-section">
+         <h4>Sleep Hygiene</h4>
+         <ul>
+          <li>Consistent bedtime and wake time</li>
+          <li>Dark, cool room (65-68°F ideal)</li>
+          <li>Avoid screens 1 hour before bed</li>
+          <li>Limit caffeine after 2pm</li>
+          <li>Create a relaxing bedtime routine</li>
+         </ul>
+        </div>
+        <div class="content-section">
+         <h4>Mindfulness &amp; Stress Management</h4>
+         <ul>
+          <li>Deep breathing exercises (4-7-8 technique)</li>
+          <li>5-minute meditation or quiet reflection</li>
+          <li>Journaling (use the Journal tab!)</li>
+          <li>Progressive muscle relaxation</li>
+          <li>Spend time in nature when possible</li>
+         </ul>
+        </div>
+       </div>
+      </div>
+     </div>
+    </main>
+   </div><!-- Journaling Tool -->
+   <div id="journal" class="page">
+    <header class="page-header"><button class="back-button" onclick="navigateTo('home')"> <span class="back-arrow">←</span> Back to Home </button>
+     <h1 class="page-title" id="journal-page-title">Private Journal</h1>
+     <div></div>
+    </header>
+    <main class="page-content">
+     <div class="new-post-form">
+      <h2 style="color: #1e293b; margin: 0 0 1rem 0;">Today's Entry</h2>
+      <form id="journal-form" onsubmit="handleJournalEntry(event)">
+       <div class="form-group"><label for="journal-mood">How are you feeling today?</label> <select id="journal-mood" class="form-input" required> <option value="">Select your mood...</option> <option value="amazing">😄 Amazing - Feeling on top of the world!</option> <option value="good">😊 Good - Positive and content</option> <option value="okay">😐 Okay - Just getting through the day</option> <option value="struggling">😔 Struggling - Having a tough time</option> <option value="difficult">😢 Difficult - Really challenging day</option> </select>
+       </div>
+       <div class="form-group"><label for="journal-title">Entry Title (Optional)</label> <input type="text" id="journal-title" class="form-input" placeholder="Give this entry a title...">
+       </div>
+       <div class="form-group"><label for="journal-gratitude">What are you grateful for today? (Optional)</label> <input type="text" id="journal-gratitude" class="form-input" placeholder="Something positive from today...">
+       </div>
+       <div class="form-group"><label for="journal-content">Write your thoughts...</label> <textarea id="journal-content" class="form-textarea" style="min-height: 150px;" placeholder="Record your thoughts, emotions, challenges, victories, reflections, or anything on your mind..." required></textarea>
+       </div>
+       <div class="form-group"><label for="journal-tags">Tags (Optional)</label> <input type="text" id="journal-tags" class="form-input" placeholder="e.g., cravings, exercise, family, work (comma separated)">
+       </div><button type="submit" class="submit-button" id="journal-submit">Save Entry</button>
+      </form>
+     </div>
+     <div id="journal-entries"></div>
+    </main>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      app_title: "NoNic Guide",
+      welcome_message: "Your companion for a healthier, happier you",
+      tagline: "Your path to a healthy life starts here. Simple tools. Real support.",
+      health_tab_label: "Health Monitoring",
+      pattern_tab_label: "Pattern Watch",
+      support_tab_label: "Support Circle",
+      art_tab_label: "Art Corner",
+      library_tab_label: "Wellness Library",
+      journal_tab_label: "Journal",
+      background_color: "#24284A",
+      surface_color: "#ffffff",
+      text_color: "#24284A",
+      primary_action_color: "#8E2928",
+      secondary_text_color: "#F6B737",
+      font_family: "League Spartan",
+      font_size: 16
+    };
+
+    let allRecords = [];
+
+    function navigateTo(pageId) {
+      const pages = document.querySelectorAll('.page');
+      pages.forEach(page => page.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      document.getElementById('app-wrapper').scrollTop = 0;
+    }
+
+    async function syncHeartRate() {
+      const statusEl = document.getElementById('watch-status');
+      const syncBtn = document.getElementById('sync-watch-btn');
+      const heartRateInput = document.getElementById('heart-rate');
+      
+      syncBtn.disabled = true;
+      syncBtn.textContent = '⏳ Syncing...';
+      statusEl.textContent = 'Connecting to device...';
+      statusEl.style.color = '#64748b';
+
+      try {
+        // Check if Web Bluetooth is available
+        if (!navigator.bluetooth) {
+          throw new Error('Web Bluetooth is not supported in this browser. Try Chrome or Edge.');
+        }
+
+        // Request Bluetooth device with Heart Rate service
+        const device = await navigator.bluetooth.requestDevice({
+          filters: [{ services: ['heart_rate'] }],
+          optionalServices: ['heart_rate']
+        });
+
+        statusEl.textContent = 'Connecting to ' + device.name + '...';
+
+        const server = await device.gatt.connect();
+        const service = await server.getPrimaryService('heart_rate');
+        const characteristic = await service.getCharacteristic('heart_rate_measurement');
+
+        statusEl.textContent = 'Reading heart rate...';
+
+        // Read heart rate value
+        const value = await characteristic.readValue();
+        
+        // Parse heart rate measurement (first byte is flags, second is heart rate)
+        const heartRate = value.getUint8(1);
+
+        heartRateInput.value = heartRate;
+        statusEl.textContent = `✅ Synced successfully! Heart rate: ${heartRate} bpm`;
+        statusEl.style.color = '#16a34a';
+
+        // Disconnect after reading
+        device.gatt.disconnect();
+
+      } catch (error) {
+        console.error('Sync error:', error);
+        
+        if (error.message.includes('not supported')) {
+          statusEl.textContent = '❌ ' + error.message;
+        } else if (error.name === 'NotFoundError') {
+          statusEl.textContent = '❌ No device selected or device not found';
+        } else if (error.name === 'SecurityError') {
+          statusEl.textContent = '❌ Bluetooth access denied. Check browser permissions.';
+        } else {
+          // Fallback: simulate heart rate for demo purposes
+          const simulatedHR = Math.floor(Math.random() * (85 - 60 + 1)) + 60;
+          heartRateInput.value = simulatedHR;
+          statusEl.textContent = `📱 Demo mode: Generated sample reading (${simulatedHR} bpm). Connect a real device for accurate data.`;
+        }
+        statusEl.style.color = '#f87171';
+      }
+
+      syncBtn.disabled = false;
+      syncBtn.textContent = '⌚ Sync Watch';
+    }
+
+    function handleImagePreview(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('preview-img').src = e.target.result;
+          document.getElementById('image-preview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function clearImagePreview() {
+      document.getElementById('art-image').value = '';
+      document.getElementById('image-preview').style.display = 'none';
+      document.getElementById('preview-img').src = '';
+    }
+
+    function toggleLibraryContent(topicId) {
+      const content = document.getElementById(`${topicId}-content`);
+      const textEl = document.getElementById(`${topicId}-text`);
+      const arrowEl = document.getElementById(`${topicId}-arrow`);
+      
+      const isExpanded = content.classList.contains('expanded');
+      
+      // Close all other sections first
+      const allContents = document.querySelectorAll('.library-content');
+      allContents.forEach(c => {
+        if (c !== content) {
+          c.classList.remove('expanded');
+        }
+      });
+      
+      // Reset all arrows
+      ['cardio', 'brain', 'respiratory', 'myths', 'dependency', 'wellness'].forEach(id => {
+        if (id !== topicId) {
+          const arrow = document.getElementById(`${id}-arrow`);
+          const text = document.getElementById(`${id}-text`);
+          if (arrow) arrow.textContent = '→';
+          if (text) {
+            const originalTexts = {
+              'cardio': 'Learn More',
+              'brain': 'Learn More',
+              'respiratory': 'Learn More',
+              'myths': 'Read More',
+              'dependency': 'Learn More',
+              'wellness': 'Explore Topics'
+            };
+            text.textContent = originalTexts[id];
+          }
+        }
+      });
+      
+      // Toggle current section
+      if (isExpanded) {
+        content.classList.remove('expanded');
+        arrowEl.textContent = '→';
+        const originalTexts = {
+          'cardio': 'Learn More',
+          'brain': 'Learn More',
+          'respiratory': 'Learn More',
+          'myths': 'Read More',
+          'dependency': 'Learn More',
+          'wellness': 'Explore Topics'
+        };
+        textEl.textContent = originalTexts[topicId];
+      } else {
+        content.classList.add('expanded');
+        arrowEl.textContent = '↑';
+        textEl.textContent = 'Show Less';
+      }
+    }
+
+    async function handleHealthCheckIn(event) {
+      event.preventDefault();
+      
+      const breathing = parseInt(document.getElementById('breathing').value);
+      const energy = parseInt(document.getElementById('energy').value);
+      const sleep = parseInt(document.getElementById('sleep').value);
+      const heartRate = parseInt(document.getElementById('heart-rate').value);
+      const craving = parseInt(document.getElementById('craving').value);
+
+      if (allRecords.filter(r => r.type === 'health').length >= 999) {
+        showToast('Maximum limit reached. Please delete some check-ins first.');
+        return;
+      }
+
+      const submitBtn = document.getElementById('health-submit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Saving...';
+
+      const result = await window.dataSdk.create({
+        id: Date.now().toString(),
+        type: 'health',
+        date: new Date().toISOString(),
+        breathing: breathing,
+        energy: energy,
+        sleep: sleep,
+        heart_rate: heartRate,
+        craving: craving
+      });
+
+      if (result.isOk) {
+        document.getElementById('health-form').reset();
+        showToast('✅ Check-in saved successfully!');
+      } else {
+        showToast('Failed to save check-in. Please try again.');
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Check-In';
+    }
+
+    async function handleSupportPost(event) {
+      event.preventDefault();
+      
+      const username = document.getElementById('support-username').value.trim() || 'Anonymous';
+      const category = document.getElementById('support-category').value;
+      const title = document.getElementById('support-title').value.trim();
+      const content = document.getElementById('support-content').value.trim();
+      
+      if (!content || !title || !category) return;
+
+      if (allRecords.filter(r => r.type === 'support').length >= 999) {
+        showToast('Maximum limit reached. Please delete some posts first.');
+        return;
+      }
+
+      const submitBtn = document.getElementById('support-submit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Posting...';
+
+      const result = await window.dataSdk.create({
+        id: Date.now().toString(),
+        type: 'support',
+        content: JSON.stringify({
+          username: username,
+          category: category,
+          title: title,
+          message: content,
+          likes: 0,
+          replies: 0
+        }),
+        date: new Date().toISOString()
+      });
+
+      if (result.isOk) {
+        document.getElementById('support-form').reset();
+        showToast('✅ Posted to Support Circle!');
+      } else {
+        showToast('Failed to post. Please try again.');
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Post to Circle';
+    }
+
+    async function likePost(postId) {
+      const post = allRecords.find(r => r.id === postId);
+      if (!post) return;
+
+      const data = JSON.parse(post.content);
+      data.likes = (data.likes || 0) + 1;
+      
+      const updatedPost = { ...post, content: JSON.stringify(data) };
+      const result = await window.dataSdk.update(updatedPost);
+      
+      if (!result.isOk) {
+        showToast('Failed to like post. Please try again.');
+      }
+    }
+
+    async function handleArtPost(event) {
+      event.preventDefault();
+      
+      const username = document.getElementById('art-username').value.trim() || 'Anonymous Artist';
+      const medium = document.getElementById('art-medium').value;
+      const title = document.getElementById('art-title').value.trim();
+      const description = document.getElementById('art-description').value.trim();
+      const emotion = document.getElementById('art-emotion').value.trim();
+      const imageFile = document.getElementById('art-image').files[0];
+      
+      if (!title || !description || !medium || !emotion) return;
+
+      if (allRecords.filter(r => r.type === 'art').length >= 999) {
+        showToast('Maximum limit reached. Please delete some artworks first.');
+        return;
+      }
+
+      const submitBtn = document.getElementById('art-submit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sharing...';
+
+      let imageData = '';
+      if (imageFile) {
+        const reader = new FileReader();
+        imageData = await new Promise((resolve) => {
+          reader.onload = (e) => resolve(e.target.result);
+          reader.readAsDataURL(imageFile);
+        });
+      }
+
+      const result = await window.dataSdk.create({
+        id: Date.now().toString(),
+        type: 'art',
+        content: JSON.stringify({
+          username: username,
+          medium: medium,
+          title: title,
+          description: description,
+          emotion: emotion,
+          likes: 0,
+          image: imageData
+        }),
+        date: new Date().toISOString()
+      });
+
+      if (result.isOk) {
+        document.getElementById('art-form').reset();
+        clearImagePreview();
+        showToast('✅ Artwork shared successfully!');
+      } else {
+        showToast('Failed to share artwork. Please try again.');
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Share Artwork';
+    }
+
+    async function likeArt(artId) {
+      const art = allRecords.find(r => r.id === artId);
+      if (!art) return;
+
+      const data = JSON.parse(art.content);
+      data.likes = (data.likes || 0) + 1;
+      
+      const updatedArt = { ...art, content: JSON.stringify(data) };
+      const result = await window.dataSdk.update(updatedArt);
+      
+      if (!result.isOk) {
+        showToast('Failed to like artwork. Please try again.');
+      }
+    }
+
+    async function handleJournalEntry(event) {
+      event.preventDefault();
+      
+      const mood = document.getElementById('journal-mood').value;
+      const title = document.getElementById('journal-title').value.trim();
+      const gratitude = document.getElementById('journal-gratitude').value.trim();
+      const content = document.getElementById('journal-content').value.trim();
+      const tags = document.getElementById('journal-tags').value.trim();
+      
+      if (!content || !mood) return;
+
+      if (allRecords.filter(r => r.type === 'journal').length >= 999) {
+        showToast('Maximum limit reached. Please delete some entries first.');
+        return;
+      }
+
+      const submitBtn = document.getElementById('journal-submit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Saving...';
+
+      const result = await window.dataSdk.create({
+        id: Date.now().toString(),
+        type: 'journal',
+        content: JSON.stringify({
+          mood: mood,
+          title: title || 'Journal Entry',
+          gratitude: gratitude,
+          entry: content,
+          tags: tags
+        }),
+        date: new Date().toISOString()
+      });
+
+      if (result.isOk) {
+        document.getElementById('journal-form').reset();
+        showToast('✅ Journal entry saved!');
+      } else {
+        showToast('Failed to save entry. Please try again.');
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Save Entry';
+    }
+
+    async function deleteRecord(record, recordType) {
+      const result = await window.dataSdk.delete(record);
+      if (!result.isOk) {
+        showToast('Failed to delete. Please try again.');
+      }
+    }
+
+    function showToast(message) {
+      const existingToast = document.querySelector('.toast-message');
+      if (existingToast) {
+        existingToast.remove();
+      }
+
+      const toast = document.createElement('div');
+      toast.className = 'toast-message';
+      toast.textContent = message;
+      toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1e293b;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        z-index: 10000;
+        animation: slideDown 0.3s ease;
+      `;
+      
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    function renderHealthDashboard() {
+      const healthRecords = allRecords.filter(r => r.type === 'health').sort((a, b) => 
+        new Date(b.date) - new Date(a.date)
+      );
+
+      const last7Days = healthRecords.slice(0, 7);
+      
+      if (last7Days.length > 0) {
+        const avgBreathing = (last7Days.reduce((sum, r) => sum + r.breathing, 0) / last7Days.length).toFixed(1);
+        const avgEnergy = (last7Days.reduce((sum, r) => sum + r.energy, 0) / last7Days.length).toFixed(1);
+        const avgSleep = (last7Days.reduce((sum, r) => sum + r.sleep, 0) / last7Days.length).toFixed(1);
+        const avgHeart = Math.round(last7Days.reduce((sum, r) => sum + r.heart_rate, 0) / last7Days.length);
+
+        document.getElementById('metric-breathing').textContent = `${Math.round(avgBreathing * 10)}%`;
+        document.getElementById('metric-energy').textContent = `${Math.round(avgEnergy * 10)}%`;
+        document.getElementById('metric-sleep').textContent = `${Math.round(avgSleep * 10)}%`;
+        document.getElementById('metric-heart').textContent = `${avgHeart} bpm`;
+      }
+
+      const chartContainer = document.getElementById('craving-chart');
+      if (last7Days.length > 0) {
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const cravingData = [];
+        
+        for (let i = 6; i >= 0; i--) {
+          const date = new Date();
+          date.setDate(date.getDate() - i);
+          const dayRecords = healthRecords.filter(r => {
+            const recordDate = new Date(r.date);
+            return recordDate.toDateString() === date.toDateString();
+          });
+          
+          const avgCraving = dayRecords.length > 0
+            ? dayRecords.reduce((sum, r) => sum + r.craving, 0) / dayRecords.length
+            : 0;
+          
+          cravingData.push({
+            day: days[date.getDay()],
+            value: avgCraving,
+            hasData: dayRecords.length > 0
+          });
+        }
+
+        chartContainer.innerHTML = cravingData.map(d => {
+          const height = d.hasData ? (d.value / 10 * 100) : 0;
+          return `
+            <div class="chart-bar" style="height: ${height}%; ${!d.hasData ? 'opacity: 0.2;' : ''}">
+              <div class="chart-label">${d.day}</div>
+            </div>
+          `;
+        }).join('');
+      } else {
+        chartContainer.innerHTML = `
+          <div style="text-align: center; color: #94a3b8; width: 100%; padding: 2rem;">
+            No data yet. Submit your first check-in!
+          </div>
+        `;
+      }
+
+      const totalCheckIns = healthRecords.length;
+      
+      if (totalCheckIns >= 1) {
+        document.getElementById('badge-first').style.opacity = '1';
+      }
+      if (totalCheckIns >= 3) {
+        document.getElementById('badge-3day').style.opacity = '1';
+      }
+      if (totalCheckIns >= 7) {
+        document.getElementById('badge-7day').style.opacity = '1';
+      }
+      if (totalCheckIns >= 14) {
+        document.getElementById('badge-14day').style.opacity = '1';
+      }
+      if (totalCheckIns >= 30) {
+        document.getElementById('badge-30day').style.opacity = '1';
+      }
+
+      if (healthRecords.length >= 3) {
+        const last3 = healthRecords.slice(0, 3);
+        if (last3.every(r => r.craving < 4)) {
+          document.getElementById('badge-master').style.opacity = '1';
+        }
+      }
+    }
+
+    function renderSupportPosts() {
+      const container = document.getElementById('support-posts');
+      const posts = allRecords.filter(r => r.type === 'support').sort((a, b) => 
+        new Date(b.date) - new Date(a.date)
+      );
+
+      if (posts.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">💬</div>
+            <p>No posts yet. Be the first to share!</p>
+          </div>
+        `;
+        return;
+      }
+
+      const categoryIcons = {
+        victory: '💪',
+        struggle: '💭',
+        tip: '💡',
+        milestone: '🎯',
+        question: '❓'
+      };
+
+      const categoryLabels = {
+        victory: 'Victory Story',
+        struggle: 'Need Support',
+        tip: 'Helpful Tip',
+        milestone: 'Milestone',
+        question: 'Question'
+      };
+
+      container.innerHTML = posts.map(post => {
+        const date = new Date(post.date);
+        const timeAgo = getTimeAgo(date);
+        
+        let data;
+        try {
+          data = JSON.parse(post.content);
+        } catch {
+          data = { username: 'Anonymous', category: 'tip', title: 'Shared Experience', message: post.content, likes: 0 };
+        }
+        
+        const categoryIcon = categoryIcons[data.category] || '💬';
+        const categoryLabel = categoryLabels[data.category] || 'Post';
+        
+        return `
+          <div class="forum-post">
+            <div class="post-header">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span class="post-author">${escapeHtml(data.username)}</span>
+                <span style="background: #f0f9ff; color: #64748b; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 6px;">
+                  ${categoryIcon} ${categoryLabel}
+                </span>
+              </div>
+              <span class="post-time">${timeAgo}</span>
+            </div>
+            <h3 style="color: #1e293b; font-size: 1.125rem; margin: 0.75rem 0 0.5rem 0; font-weight: 600;">
+              ${escapeHtml(data.title)}
+            </h3>
+            <div class="post-content">${escapeHtml(data.message)}</div>
+            <div class="post-actions">
+              <button class="post-action" onclick="likePost('${post.id}')">
+                ❤️ ${data.likes || 0} ${data.likes === 1 ? 'Like' : 'Likes'}
+              </button>
+              <button class="post-action" onclick="deleteRecord(allRecords.find(r => r.id === '${post.id}'), 'support')">
+                🗑️ Delete
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderArtGallery() {
+      const container = document.getElementById('art-gallery');
+      const artworks = allRecords.filter(r => r.type === 'art').sort((a, b) => 
+        new Date(b.date) - new Date(a.date)
+      );
+
+      if (artworks.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <div class="empty-state-icon">🎨</div>
+            <p>No artworks shared yet. Share your creativity!</p>
+          </div>
+        `;
+        return;
+      }
+
+      const mediumIcons = {
+        painting: '🎨',
+        drawing: '✏️',
+        digital: '💻',
+        poetry: '📝',
+        music: '🎵',
+        photography: '📷',
+        craft: '✂️',
+        other: '✨'
+      };
+
+      const mediumLabels = {
+        painting: 'Painting',
+        drawing: 'Drawing',
+        digital: 'Digital Art',
+        poetry: 'Poetry',
+        music: 'Music',
+        photography: 'Photography',
+        craft: 'Craft',
+        other: 'Other'
+      };
+      
+      container.innerHTML = artworks.map((art) => {
+        const date = new Date(art.date);
+        const timeAgo = getTimeAgo(date);
+        
+        let data;
+        try {
+          data = JSON.parse(art.content);
+        } catch {
+          data = { username: 'Anonymous Artist', medium: 'other', title: art.content, description: art.category, emotion: 'Creative Expression', likes: 0, image: '' };
+        }
+
+        const mediumIcon = mediumIcons[data.medium] || '✨';
+        const mediumLabel = mediumLabels[data.medium] || 'Art';
+        
+        return `
+          <div class="art-item">
+            <div class="art-preview">
+              ${data.image ? `<img src="${data.image}" alt="${escapeHtml(data.title)}">` : `<span class="art-preview-icon">${mediumIcon}</span>`}
+            </div>
+            <div class="art-details">
+              <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                <span style="background: #f0f9ff; color: #64748b; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 6px;">
+                  ${mediumLabel}
+                </span>
+                <span style="background: #fef2f2; color: #dc2626; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 6px;">
+                  💝 ${escapeHtml(data.emotion)}
+                </span>
+              </div>
+              <h3 class="art-title">${escapeHtml(data.title)}</h3>
+              <p class="art-description">${escapeHtml(data.description)}</p>
+              <div class="art-meta">
+                <span>${escapeHtml(data.username)}</span>
+                <span>${timeAgo}</span>
+              </div>
+              <div style="margin-top: 1rem; display: flex; gap: 0.5rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+                <button class="entry-button" onclick="likeArt('${art.id}')" style="color: #f87171;">
+                  ❤️ ${data.likes || 0}
+                </button>
+                <button class="entry-button delete" onclick="deleteRecord(allRecords.find(r => r.id === '${art.id}'), 'art')">
+                  🗑️ Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderJournalEntries() {
+      const container = document.getElementById('journal-entries');
+      const entries = allRecords.filter(r => r.type === 'journal').sort((a, b) => 
+        new Date(b.date) - new Date(a.date)
+      );
+
+      if (entries.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">📝</div>
+            <p>Your journal is empty. Start writing your first entry!</p>
+          </div>
+        `;
+        return;
+      }
+
+      const moodEmojis = {
+        amazing: '😄',
+        good: '😊',
+        okay: '😐',
+        struggling: '😔',
+        difficult: '😢'
+      };
+
+      const moodLabels = {
+        amazing: 'Amazing',
+        good: 'Good',
+        okay: 'Okay',
+        struggling: 'Struggling',
+        difficult: 'Difficult'
+      };
+
+      const moodColors = {
+        amazing: '#4ade80',
+        good: '#60a5fa',
+        okay: '#fb923c',
+        struggling: '#fbbf24',
+        difficult: '#f87171'
+      };
+
+      container.innerHTML = entries.map(entry => {
+        const date = new Date(entry.date);
+        const formattedDate = date.toLocaleDateString('en-US', { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+        const time = date.toLocaleTimeString('en-US', { 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        });
+
+        let data;
+        try {
+          data = JSON.parse(entry.content);
+        } catch {
+          data = { mood: 'okay', title: 'Journal Entry', gratitude: '', entry: entry.content, tags: '' };
+        }
+
+        const moodEmoji = moodEmojis[data.mood] || '😐';
+        const moodLabel = moodLabels[data.mood] || 'Okay';
+        const moodColor = moodColors[data.mood] || '#fb923c';
+        
+        return `
+          <div class="journal-entry">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+              <div>
+                <div class="entry-date">${formattedDate} at ${time}</div>
+                <h3 style="color: #1e293b; font-size: 1.25rem; margin: 0.5rem 0; font-weight: 600;">
+                  ${escapeHtml(data.title)}
+                </h3>
+              </div>
+              <div style="background: ${moodColor}; color: white; padding: 0.5rem 1rem; border-radius: 10px; font-weight: 600; font-size: 0.875rem;">
+                ${moodEmoji} ${moodLabel}
+              </div>
+            </div>
+            
+            ${data.gratitude ? `
+              <div style="background: #f0fdf4; border-left: 4px solid #4ade80; padding: 1rem; margin-bottom: 1rem; border-radius: 6px;">
+                <div style="color: #16a34a; font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem;">
+                  🙏 Grateful for:
+                </div>
+                <div style="color: #15803d;">
+                  ${escapeHtml(data.gratitude)}
+                </div>
+              </div>
+            ` : ''}
+            
+            <div class="entry-content">${escapeHtml(data.entry)}</div>
+            
+            ${data.tags ? `
+              <div style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                ${data.tags.split(',').map(tag => `
+                  <span style="background: #f1f5f9; color: #475569; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.875rem;">
+                    #${escapeHtml(tag.trim())}
+                  </span>
+                `).join('')}
+              </div>
+            ` : ''}
+            
+            <div class="entry-actions">
+              <button class="entry-button delete" onclick="deleteRecord(allRecords.find(r => r.id === '${entry.id}'), 'journal')">
+                🗑️ Delete Entry
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getTimeAgo(date) {
+      const seconds = Math.floor((new Date() - date) / 1000);
+      
+      if (seconds < 60) return 'Just now';
+      if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+      if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+      if (seconds < 604800) return `${Math.floor(seconds / 86400)} days ago`;
+      
+      return date.toLocaleDateString();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function renderPatternWatch() {
+      const healthRecords = allRecords.filter(r => r.type === 'health').sort((a, b) => 
+        new Date(b.date) - new Date(a.date)
+      );
+
+      if (healthRecords.length === 0) {
+        document.getElementById('risk-assessment').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">📊</div>
+            <p>No health data yet. Complete daily check-ins to see your risk assessment.</p>
+          </div>
+        `;
+        document.getElementById('behavioral-patterns').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">🔍</div>
+            <p>Submit health check-ins to analyze your behavioral patterns.</p>
+          </div>
+        `;
+        document.getElementById('trigger-analysis').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">💡</div>
+            <p>Pattern analysis will appear after you log multiple check-ins.</p>
+          </div>
+        `;
+        document.getElementById('recommendations-section').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">✨</div>
+            <p>Recommendations will be generated based on your health data.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const last7Days = healthRecords.slice(0, 7);
+      
+      const avgCraving = last7Days.reduce((sum, r) => sum + r.craving, 0) / last7Days.length;
+      const avgEnergy = last7Days.reduce((sum, r) => sum + r.energy, 0) / last7Days.length;
+      const avgSleep = last7Days.reduce((sum, r) => sum + r.sleep, 0) / last7Days.length;
+      
+      let riskLevel = 'low';
+      let riskMessage = "You're doing great! Keep up the excellent work with your check-ins and self-care.";
+      let riskClass = 'low-risk';
+      let riskIcon = '✅';
+      
+      if (avgCraving >= 7) {
+        riskLevel = 'high';
+        riskMessage = "High craving levels detected. Consider reaching out to support circle or using coping strategies.";
+        riskClass = '';
+        riskIcon = '⚠️';
+      } else if (avgCraving >= 5) {
+        riskLevel = 'medium';
+        riskMessage = "Moderate craving levels. Stay mindful and use your coping techniques when needed.";
+        riskClass = '';
+        riskIcon = '⚡';
+      }
+
+      document.getElementById('risk-assessment').innerHTML = `
+        <div class="alert-box ${riskClass}">
+          <div class="alert-title">${riskIcon} ${riskLevel === 'low' ? 'Low' : riskLevel === 'medium' ? 'Medium' : 'High'} Risk</div>
+          <p style="color: ${riskLevel === 'low' ? '#16a34a' : '#dc2626'}; margin: 0.5rem 0 0 0;">${riskMessage}</p>
+        </div>
+      `;
+
+      const patterns = [];
+      
+      if (healthRecords.length >= 3) {
+        patterns.push(`✅ <strong>Check-in streak:</strong> ${healthRecords.length} day${healthRecords.length > 1 ? 's' : ''} logged`);
+      }
+      
+      if (avgEnergy >= 7) {
+        patterns.push('✅ <strong>Energy levels:</strong> Consistently high - excellent progress!');
+      } else if (avgEnergy < 5) {
+        patterns.push('⚠️ <strong>Energy levels:</strong> Lower than average - consider rest and nutrition');
+      } else {
+        patterns.push('✅ <strong>Energy levels:</strong> Stable and within healthy range');
+      }
+      
+      if (avgSleep >= 7) {
+        patterns.push('✅ <strong>Sleep quality:</strong> Good sleep patterns maintained');
+      } else if (avgSleep < 5) {
+        patterns.push('⚠️ <strong>Sleep quality:</strong> Below average - prioritize sleep hygiene');
+      } else {
+        patterns.push('✅ <strong>Sleep quality:</strong> Adequate sleep quality');
+      }
+
+      if (avgCraving < 4) {
+        patterns.push('✅ <strong>Cravings:</strong> Well-managed and declining');
+      } else if (avgCraving >= 7) {
+        patterns.push('⚠️ <strong>Cravings:</strong> Elevated levels - use support resources');
+      } else {
+        patterns.push('⚡ <strong>Cravings:</strong> Moderate levels - stay vigilant');
+      }
+
+      document.getElementById('behavioral-patterns').innerHTML = `
+        <ul class="factor-list">
+          ${patterns.map(p => `<li>${p}</li>`).join('')}
+        </ul>
+      `;
+
+      if (healthRecords.length >= 3) {
+        const triggerInsights = [];
+        
+        const lowEnergyHighCraving = last7Days.filter(r => r.energy < 5 && r.craving > 6);
+        if (lowEnergyHighCraving.length > 0) {
+          triggerInsights.push('⚠️ <strong>Pattern detected:</strong> Cravings increase when energy is low. Try energizing activities.');
+        }
+        
+        const poorSleepHighCraving = last7Days.filter(r => r.sleep < 5 && r.craving > 6);
+        if (poorSleepHighCraving.length > 0) {
+          triggerInsights.push('⚠️ <strong>Pattern detected:</strong> Poor sleep correlates with higher cravings. Prioritize rest.');
+        }
+        
+        const goodDays = last7Days.filter(r => r.energy >= 7 && r.sleep >= 7 && r.craving < 5);
+        if (goodDays.length >= 3) {
+          triggerInsights.push('✅ <strong>Success pattern:</strong> Good sleep + high energy = low cravings. Keep it up!');
+        }
+
+        if (triggerInsights.length > 0) {
+          document.getElementById('trigger-analysis').innerHTML = `
+            <ul class="factor-list">
+              ${triggerInsights.map(t => `<li>${t}</li>`).join('')}
+            </ul>
+          `;
+        } else {
+          document.getElementById('trigger-analysis').innerHTML = `
+            <div style="color: #475569; line-height: 1.6;">
+              <p style="margin: 0;">No significant trigger patterns detected yet. Continue logging to identify personal triggers and success factors.</p>
+            </div>
+          `;
+        }
+      }
+
+      const recommendations = [];
+      
+      if (avgCraving >= 6) {
+        recommendations.push('Visit the Support Circle to connect with others who understand your journey');
+        recommendations.push('Use the Journal to identify specific craving triggers');
+        recommendations.push('Practice deep breathing exercises when cravings spike');
+      } else if (avgCraving >= 4) {
+        recommendations.push('Continue your daily check-in routine - it\'s working well');
+        recommendations.push('Explore the Wellness Library for additional coping strategies');
+        recommendations.push('Consider adding physical activity to your daily routine');
+      } else {
+        recommendations.push('Excellent craving management! Share your success in the Support Circle');
+        recommendations.push('Maintain your current healthy habits and routines');
+        recommendations.push('Celebrate your progress in the Art Corner');
+      }
+
+      if (avgEnergy < 5) {
+        recommendations.push('Focus on nutrition and hydration to boost energy levels');
+        recommendations.push('Try short walks or light exercise to increase vitality');
+      }
+
+      if (avgSleep < 6) {
+        recommendations.push('Establish a consistent bedtime routine for better sleep');
+        recommendations.push('Avoid screens 1 hour before bed');
+      }
+
+      document.getElementById('recommendations-section').innerHTML = `
+        <div style="color: #475569; line-height: 1.6;">
+          <p style="margin: 0 0 1rem 0;">Based on your patterns, here are personalized suggestions:</p>
+          <ul style="margin: 0; padding-left: 1.5rem;">
+            ${recommendations.map(r => `<li style="margin-bottom: 0.5rem;">${r}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+    }
+
+    const dataHandler = {
+      onDataChanged(data) {
+        allRecords = data;
+        renderHealthDashboard();
+        renderPatternWatch();
+        renderSupportPosts();
+        renderArtGallery();
+        renderJournalEntries();
+      }
+    };
+
+    async function onConfigChange(config) {
+      const appTitle = config.app_title || defaultConfig.app_title;
+      const welcomeMsg = config.welcome_message || defaultConfig.welcome_message;
+      const tagline = config.tagline || defaultConfig.tagline;
+      const healthLabel = config.health_tab_label || defaultConfig.health_tab_label;
+      const patternLabel = config.pattern_tab_label || defaultConfig.pattern_tab_label;
+      const supportLabel = config.support_tab_label || defaultConfig.support_tab_label;
+      const artLabel = config.art_tab_label || defaultConfig.art_tab_label;
+      const libraryLabel = config.library_tab_label || defaultConfig.library_tab_label;
+      const journalLabel = config.journal_tab_label || defaultConfig.journal_tab_label;
+      
+      const bgColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryTextColor = config.secondary_text_color || defaultConfig.secondary_text_color;
+      
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseSize = config.font_size || defaultConfig.font_size;
+
+      document.getElementById('app-title').textContent = appTitle;
+      document.getElementById('welcome-message').textContent = welcomeMsg;
+      document.getElementById('tagline').textContent = tagline;
+      document.getElementById('health-menu-title').textContent = healthLabel;
+      document.getElementById('pattern-menu-title').textContent = patternLabel;
+      document.getElementById('support-menu-title').textContent = supportLabel;
+      document.getElementById('art-menu-title').textContent = artLabel;
+      document.getElementById('library-menu-title').textContent = libraryLabel;
+      document.getElementById('journal-menu-title').textContent = journalLabel;
+      
+      document.getElementById('health-page-title').textContent = healthLabel;
+      document.getElementById('pattern-page-title').textContent = patternLabel;
+      document.getElementById('support-page-title').textContent = supportLabel;
+      document.getElementById('art-page-title').textContent = artLabel;
+      document.getElementById('library-page-title').textContent = libraryLabel;
+      document.getElementById('journal-page-title').textContent = journalLabel;
+
+      document.getElementById('app-wrapper').style.background = `linear-gradient(135deg, ${bgColor} 0%, ${bgColor}dd 100%)`;
+      
+      const surfaces = document.querySelectorAll('.dashboard-section, .menu-card, .forum-post, .art-item, .library-card, .journal-entry, .page-header, .new-post-form');
+      surfaces.forEach(el => el.style.backgroundColor = surfaceColor);
+      
+      const textElements = document.querySelectorAll('.page-title, .menu-card h2, .dashboard-section h2, h1, h2, h3, .metric-value, .post-content, .art-title, .entry-content');
+      textElements.forEach(el => el.style.color = textColor);
+      
+      const secondaryTexts = document.querySelectorAll('.metric-label, .menu-card p, .post-time, .art-description, .entry-date, .library-card p');
+      secondaryTexts.forEach(el => el.style.color = secondaryTextColor);
+      
+      const buttons = document.querySelectorAll('.back-button, .submit-button');
+      buttons.forEach(btn => {
+        btn.style.backgroundColor = primaryColor;
+        btn.style.color = surfaceColor;
+      });
+
+      document.body.style.fontFamily = `${customFont}, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`;
+      
+      document.getElementById('app-title').style.fontSize = `${baseSize * 2.2}px`;
+      document.getElementById('welcome-message').style.fontSize = `${baseSize * 1.125}px`;
+      document.getElementById('tagline').style.fontSize = `${baseSize * 1.5}px`;
+      
+      const h2Elements = document.querySelectorAll('.menu-card h2, .dashboard-section h2, .page-title');
+      h2Elements.forEach(el => el.style.fontSize = `${baseSize * 1.5}px`);
+      
+      const bodyText = document.querySelectorAll('.menu-card p, .post-content, .entry-content, .library-card p');
+      bodyText.forEach(el => el.style.fontSize = `${baseSize}px`);
+      
+      const smallText = document.querySelectorAll('.metric-label, .post-time, .art-description, .entry-date');
+      smallText.forEach(el => el.style.fontSize = `${baseSize * 0.875}px`);
+    }
+
+    if (window.dataSdk) {
+      window.dataSdk.init(dataHandler);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                config.surface_color = value;
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => {
+                config.primary_action_color = value;
+                window.elementSdk.setConfig({ primary_action_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_text_color || defaultConfig.secondary_text_color,
+              set: (value) => {
+                config.secondary_text_color = value;
+                window.elementSdk.setConfig({ secondary_text_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['app_title', config.app_title || defaultConfig.app_title],
+          ['welcome_message', config.welcome_message || defaultConfig.welcome_message],
+          ['tagline', config.tagline || defaultConfig.tagline],
+          ['health_tab_label', config.health_tab_label || defaultConfig.health_tab_label],
+          ['pattern_tab_label', config.pattern_tab_label || defaultConfig.pattern_tab_label],
+          ['support_tab_label', config.support_tab_label || defaultConfig.support_tab_label],
+          ['art_tab_label', config.art_tab_label || defaultConfig.art_tab_label],
+          ['library_tab_label', config.library_tab_label || defaultConfig.library_tab_label],
+          ['journal_tab_label', config.journal_tab_label || defaultConfig.journal_tab_label]
+        ])
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9adf268bb3c73b7f',t:'MTc2NTczMDUwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
